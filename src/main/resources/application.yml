@@ -1,8 +1,63 @@
-#
-# application.yml — главный конфигурационный файл Spring Boot.
+spring:
+  application:
+    name: bankcard-service
+  
+  # PostgreSQL Database Configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankdb
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  # JPA / Hibernate Configuration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+          fetch_size: 50
+        order_inserts: true
+        order_updates: true
+        connection:
+          provider_disables_autocommit: false
+  
+  # Liquibase Configuration
+  liquibase:
+    change-log: db/migration/db.changelog-master.yaml
+    enabled: true
+  web:
+    error:
+      include-binding-errors: always
+      include-message: always
 
-Что нужно сделать:
-  - Указать настройки подключения к базе данных.
-  - Указать порт приложения.
-  - Настроить параметры безопасности и JWT.
-  - Включить Swagger UI.
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:fvzWlhtB+cwtyrQJgJ9OxuflZRgGZVdk906Y46V4igc=}
+  access-token-expiry: 900000      # 15 minutes
+  refresh-token-expiry: 604800000  # 7 days
+
+# Card number encryption (AES-256-GCM, base64-encoded 32-byte key)
+app:
+  encryption:
+    card-key: ${CARD_ENCRYPTION_KEY:0XDOD4NtV66HFwQaar3FECd9zYxCXPSoBWGVRCIBDs8=}
+
+
+server:
+  port: 8080
+
+# Logging Configuration
+logging:
+  level:
+    com.example.bankcards: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.security: DEBUG

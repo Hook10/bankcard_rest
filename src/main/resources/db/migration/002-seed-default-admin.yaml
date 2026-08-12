@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-seed-default-admin
+      author: bankcards
+      comment: >
+        Admin credentials
+        Email: admin@bankcard.local / Password: Admin123!
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: admin@bankcard.local
+              - column:
+                  name: phone_number
+                  value: "+10000000000"
+              - column:
+                  name: full_name
+                  value: System Administrator
+              - column:
+                  name: password
+                  value: "$2a$10$V3H4GfVqNtPBhwvK6Okaq.0.atHADaqB6HgY5tp3zhvLBBDjUzuwa"
+              - column:
+                  name: role
+                  value: ADMIN
+              - column:
+                  name: enabled
+                  valueBoolean: true
+              - column:
+                  name: email_verified
+                  valueBoolean: true
+              - column:
+                  name: phone_verified
+                  valueBoolean: true
+      rollback:
+        - delete:
+            tableName: users
+            where: email='admin@bankcard.local'
